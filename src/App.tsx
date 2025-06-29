@@ -1,18 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home/Home";
-import About from "./pages/About/About";
-import UserProfile from "./pages/UserProfile/UserProfile";
-import NotFound from "./pages/NotFound/NotFound";
+import { BrowserRouter } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
+import routes from "./routes/route";
+
+function AppRoutes() {
+  return useRoutes(routes);
+}
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/users/:id" element={<UserProfile />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   );
 }
