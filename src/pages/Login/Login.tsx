@@ -22,7 +22,7 @@ type LoginType = "phone" | "account";
 
 const LoginLayout = () => {
   const { token } = theme.useToken();
-  const [loginType, setLoginType] = useState<LoginType>("phone");
+  const [loginType, setLoginType] = useState<LoginType>("account");
 
   const iconStyles: CSSProperties = {
     marginInlineStart: "16px",
@@ -31,6 +31,17 @@ const LoginLayout = () => {
     verticalAlign: "middle",
     cursor: "pointer",
   };
+
+  const items = [
+    {
+      label: "账号密码登录",
+      key: "account",
+    },
+    {
+      label: "手机号登录",
+      key: "phone",
+    },
+  ];
 
   return (
     <ProConfigProvider hashed={false}>
@@ -49,13 +60,11 @@ const LoginLayout = () => {
           }
         >
           <Tabs
+            items={items}
             centered
             activeKey={loginType}
             onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-          >
-            <Tabs.TabPane key={"account"} tab={"账号密码登录"} />
-            <Tabs.TabPane key={"phone"} tab={"手机号登录"} />
-          </Tabs>
+          />
           {loginType === "account" && (
             <>
               <ProFormText
