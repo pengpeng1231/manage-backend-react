@@ -5,6 +5,7 @@
   "dependencies": {
     "@ant-design/pro-components": "^2.8.9",
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@craco/craco": "^7.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
@@ -26,10 +27,9 @@
     "@hey-api/openapi-ts": "^0.77.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "openapi-ts": "openapi-ts"
   },
   "eslintConfig": {

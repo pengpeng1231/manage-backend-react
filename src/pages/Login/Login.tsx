@@ -7,8 +7,8 @@ import {
 } from "@ant-design/pro-components";
 import { theme } from "antd";
 import { message } from "antd";
-import { loginOrRegister } from "../../client";
-import type { LoginDto } from "../../client";
+import { loginOrRegister } from "@/client";
+import type { LoginDto } from "@/client";
 
 const LoginLayout = () => {
   const { token } = theme.useToken();
