@@ -16,6 +16,30 @@ export type ResultInteger = {
     success?: boolean;
 };
 
+export type LoginDto = {
+    username?: string;
+    password?: string;
+};
+
+export type ResultLoginDto = {
+    code?: number;
+    message?: string;
+    data?: LoginDto;
+    success?: boolean;
+};
+
+export type LoginVo = {
+    token?: string;
+    username?: string;
+};
+
+export type ResultLoginVo = {
+    code?: number;
+    message?: string;
+    data?: LoginVo;
+    success?: boolean;
+};
+
 export type ResultUserVo = {
     code?: number;
     message?: string;
@@ -61,6 +85,54 @@ export type EditUserResponses = {
 };
 
 export type EditUserResponse = EditUserResponses[keyof EditUserResponses];
+
+export type RegisterData = {
+    body: LoginDto;
+    path?: never;
+    query?: never;
+    url: '/api/register';
+};
+
+export type RegisterResponses = {
+    /**
+     * OK
+     */
+    200: ResultLoginDto;
+};
+
+export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
+
+export type LoginData = {
+    body: LoginDto;
+    path?: never;
+    query?: never;
+    url: '/api/login';
+};
+
+export type LoginResponses = {
+    /**
+     * OK
+     */
+    200: ResultLoginVo;
+};
+
+export type LoginResponse = LoginResponses[keyof LoginResponses];
+
+export type LoginOrRegisterData = {
+    body: LoginDto;
+    path?: never;
+    query?: never;
+    url: '/api/loginOrRegister';
+};
+
+export type LoginOrRegisterResponses = {
+    /**
+     * OK
+     */
+    200: ResultLoginVo;
+};
+
+export type LoginOrRegisterResponse = LoginOrRegisterResponses[keyof LoginOrRegisterResponses];
 
 export type DeleteUserData = {
     body?: never;

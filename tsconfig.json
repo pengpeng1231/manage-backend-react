@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/pages/axios.config.ts", "openapi-ts.config.ts"  ]
 }
