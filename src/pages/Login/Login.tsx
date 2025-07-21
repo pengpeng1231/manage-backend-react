@@ -9,11 +9,12 @@ import { theme } from "antd";
 import { message } from "antd";
 import { loginOrRegister } from "@/client";
 import type { LoginDto } from "@/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const LoginLayout = () => {
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const onFinish = async (values: LoginDto) => {
     try {
@@ -26,8 +27,7 @@ const LoginLayout = () => {
 
       if (res.data?.success) {
         message.success(res.data.message);
-
-        navigate("/");
+        navigate(searchParams.get("redirect") || "/");
       } else {
         message.error(res.data?.message);
       }
