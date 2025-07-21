@@ -28,18 +28,6 @@ export type ResultLoginDto = {
     success?: boolean;
 };
 
-export type LoginVo = {
-    token?: string;
-    username?: string;
-};
-
-export type ResultLoginVo = {
-    code?: number;
-    message?: string;
-    data?: LoginVo;
-    success?: boolean;
-};
-
 export type ResultUserVo = {
     code?: number;
     message?: string;
@@ -113,7 +101,7 @@ export type LoginResponses = {
     /**
      * OK
      */
-    200: ResultLoginVo;
+    200: ResultUserVo;
 };
 
 export type LoginResponse = LoginResponses[keyof LoginResponses];
@@ -129,10 +117,26 @@ export type LoginOrRegisterResponses = {
     /**
      * OK
      */
-    200: ResultLoginVo;
+    200: ResultUserVo;
 };
 
 export type LoginOrRegisterResponse = LoginOrRegisterResponses[keyof LoginOrRegisterResponses];
+
+export type CheckAuthData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/checkAuth';
+};
+
+export type CheckAuthResponses = {
+    /**
+     * OK
+     */
+    200: ResultUserVo;
+};
+
+export type CheckAuthResponse = CheckAuthResponses[keyof CheckAuthResponses];
 
 export type DeleteUserData = {
     body?: never;

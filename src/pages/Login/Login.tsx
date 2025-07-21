@@ -9,10 +9,11 @@ import { theme } from "antd";
 import { message } from "antd";
 import { loginOrRegister } from "@/client";
 import type { LoginDto } from "@/client";
+import { useNavigate } from "react-router-dom";
 
 const LoginLayout = () => {
   const { token } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   const onFinish = async (values: LoginDto) => {
     try {
@@ -24,27 +25,19 @@ const LoginLayout = () => {
       });
 
       if (res.data?.success) {
-        messageApi.open({
-          type: "success",
-          content: res.data.message,
-        });
+        message.success(res.data.message);
+
+        navigate("/");
       } else {
-        messageApi.open({
-          type: "error",
-          content: res.data?.message,
-        });
+        message.error(res.data?.message);
       }
     } catch (error) {
-      messageApi.open({
-        type: "error",
-        content: "登录失败",
-      });
+      message.error("登录失败");
     }
   };
 
   return (
     <ProConfigProvider hashed={false}>
-      {contextHolder}
       <div style={{ backgroundColor: token.colorBgContainer }}>
         <LoginForm
           logo="https://github.githubassets.com/favicons/favicon.png"
