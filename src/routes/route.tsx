@@ -1,10 +1,13 @@
+import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
-import Login from "../pages/Login/Login";
-import Home from "../pages/Home/Home";
-import About from "../pages/About/About";
-import UserProfile from "../pages/UserProfile/UserProfile";
-import NotFound from "../pages/NotFound/NotFound";
 import BaseLayout from "../layouts/BaseLayout";
+import Login from "../pages/Login/Login";
+
+const Home = lazy(() => import("../pages/Home/Home"));
+const About = lazy(() => import("../pages/About/About"));
+const UserProfile = lazy(() => import("../pages/UserProfile/UserProfile"));
+const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
+const Menu = lazy(() => import("../pages/Menu/Menu"));
 
 const routes: RouteObject[] = [
   {
@@ -22,6 +25,10 @@ const routes: RouteObject[] = [
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "menu",
+        element: <Menu />,
       },
       {
         path: "users/:id",
