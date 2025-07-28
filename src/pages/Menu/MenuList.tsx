@@ -11,13 +11,7 @@ const MenuPage = () => {
     },
   ];
 
-  const request: BaseProTableProps["request"] = async (
-    params,
-    sort,
-    filter
-  ) => {
-    console.log(params, sort, filter);
-
+  const request: BaseProTableProps["request"] = async (params) => {
     const res = await getMenus({
       query: {
         current: params.current!,

@@ -2,7 +2,6 @@ import {
   PageContainer,
   ProLayout,
   DefaultFooter,
-  MenuDataItem,
 } from "@ant-design/pro-components";
 import { GithubOutlined } from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
