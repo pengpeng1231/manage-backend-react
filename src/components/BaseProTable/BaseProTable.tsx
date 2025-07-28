@@ -11,8 +11,8 @@ import { Key, useState } from "react";
 import { ProTableProps } from "@ant-design/pro-components";
 
 export type BaseProTableProps<
-  DataSource extends Record<string, any>,
-  U extends Record<string, any>,
+  DataSource extends Record<string, any> = Record<string, any>,
+  U extends Record<string, any> = Record<string, any>,
   ValueType = "text"
 > = ProTableProps<DataSource, U, ValueType> & {
   hidePrint?: boolean;

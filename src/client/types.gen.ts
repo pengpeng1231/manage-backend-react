@@ -9,6 +9,18 @@ export type UserDto = {
     deptId?: number;
 };
 
+export type Menu = {
+    id?: number;
+    createTime?: number;
+    updateTime?: number;
+    name?: string;
+    path?: string;
+    icon?: string;
+    status?: number;
+    parentId?: number;
+    children?: Array<Menu>;
+};
+
 export type ResultInteger = {
     code?: number;
     message?: string;
@@ -42,6 +54,28 @@ export type UserVo = {
     phone?: string;
 };
 
+export type IPageMenu = {
+    size?: number;
+    total?: number;
+    records?: Array<Menu>;
+    /**
+     * @deprecated
+     */
+    pages?: number;
+    current?: number;
+};
+
+export type ResultIPageMenu = {
+    code?: number;
+    message?: string;
+    data?: IPageMenu;
+    success?: boolean;
+};
+
+export type IdsDto = {
+    ids?: Array<number>;
+};
+
 export type CreateUserData = {
     body: UserDto;
     path?: never;
@@ -73,6 +107,54 @@ export type EditUserResponses = {
 };
 
 export type EditUserResponse = EditUserResponses[keyof EditUserResponses];
+
+export type DelMenuData = {
+    body: IdsDto;
+    path?: never;
+    query?: never;
+    url: '/api/menu';
+};
+
+export type DelMenuResponses = {
+    /**
+     * OK
+     */
+    200: ResultInteger;
+};
+
+export type DelMenuResponse = DelMenuResponses[keyof DelMenuResponses];
+
+export type CreateMenuData = {
+    body: Menu;
+    path?: never;
+    query?: never;
+    url: '/api/menu';
+};
+
+export type CreateMenuResponses = {
+    /**
+     * OK
+     */
+    200: ResultInteger;
+};
+
+export type CreateMenuResponse = CreateMenuResponses[keyof CreateMenuResponses];
+
+export type EditMenuData = {
+    body: Menu;
+    path?: never;
+    query?: never;
+    url: '/api/menu';
+};
+
+export type EditMenuResponses = {
+    /**
+     * OK
+     */
+    200: ResultInteger;
+};
+
+export type EditMenuResponse = EditMenuResponses[keyof EditMenuResponses];
 
 export type RegisterData = {
     body: LoginDto;
@@ -173,6 +255,25 @@ export type GetUserByIdResponses = {
 };
 
 export type GetUserByIdResponse = GetUserByIdResponses[keyof GetUserByIdResponses];
+
+export type GetMenusData = {
+    body?: never;
+    path?: never;
+    query: {
+        current: number;
+        pageSize: number;
+    };
+    url: '/api/menu/list';
+};
+
+export type GetMenusResponses = {
+    /**
+     * OK
+     */
+    200: ResultIPageMenu;
+};
+
+export type GetMenusResponse = GetMenusResponses[keyof GetMenusResponses];
 
 export type ClientOptions = {
     baseURL: 'http://localhost:8080' | (string & {});

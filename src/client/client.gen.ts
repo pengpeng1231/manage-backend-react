@@ -15,5 +15,4 @@ export type CreateClientConfig<T extends DefaultClientOptions = ClientOptions> =
 
 export const client = createClient(createConfig<ClientOptions>({
     baseURL: 'http://localhost:8080',
-    withCredentials: true
 }));
