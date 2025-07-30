@@ -18,7 +18,15 @@ export type Menu = {
     icon?: string;
     status?: number;
     parentId?: number;
+    sortNum?: number;
     children?: Array<Menu>;
+};
+
+export type ResultLong = {
+    code?: number;
+    message?: string;
+    data?: number;
+    success?: boolean;
 };
 
 export type ResultInteger = {
@@ -40,6 +48,33 @@ export type ResultLoginDto = {
     success?: boolean;
 };
 
+export type MenuQuery = {
+    current?: number;
+    pageSize?: number;
+    name?: string;
+    path?: string;
+    status?: number;
+    parentId?: number;
+};
+
+export type IPageMenu = {
+    size?: number;
+    current?: number;
+    total?: number;
+    records?: Array<Menu>;
+    /**
+     * @deprecated
+     */
+    pages?: number;
+};
+
+export type ResultIPageMenu = {
+    code?: number;
+    message?: string;
+    data?: IPageMenu;
+    success?: boolean;
+};
+
 export type ResultUserVo = {
     code?: number;
     message?: string;
@@ -54,21 +89,10 @@ export type UserVo = {
     phone?: string;
 };
 
-export type IPageMenu = {
-    size?: number;
-    total?: number;
-    records?: Array<Menu>;
-    /**
-     * @deprecated
-     */
-    pages?: number;
-    current?: number;
-};
-
-export type ResultIPageMenu = {
+export type ResultMenu = {
     code?: number;
     message?: string;
-    data?: IPageMenu;
+    data?: Menu;
     success?: boolean;
 };
 
@@ -135,7 +159,7 @@ export type CreateMenuResponses = {
     /**
      * OK
      */
-    200: ResultInteger;
+    200: ResultLong;
 };
 
 export type CreateMenuResponse = CreateMenuResponses[keyof CreateMenuResponses];
@@ -151,7 +175,7 @@ export type EditMenuResponses = {
     /**
      * OK
      */
-    200: ResultInteger;
+    200: ResultLong;
 };
 
 export type EditMenuResponse = EditMenuResponses[keyof EditMenuResponses];
@@ -171,6 +195,22 @@ export type RegisterResponses = {
 };
 
 export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
+
+export type GetMenusData = {
+    body: MenuQuery;
+    path?: never;
+    query?: never;
+    url: '/api/menu/list';
+};
+
+export type GetMenusResponses = {
+    /**
+     * OK
+     */
+    200: ResultIPageMenu;
+};
+
+export type GetMenusResponse = GetMenusResponses[keyof GetMenusResponses];
 
 export type LoginData = {
     body: LoginDto;
@@ -256,24 +296,23 @@ export type GetUserByIdResponses = {
 
 export type GetUserByIdResponse = GetUserByIdResponses[keyof GetUserByIdResponses];
 
-export type GetMenusData = {
+export type GetMenuData = {
     body?: never;
-    path?: never;
-    query: {
-        current: number;
-        pageSize: number;
+    path: {
+        id: number;
     };
-    url: '/api/menu/list';
+    query?: never;
+    url: '/api/menu/{id}';
 };
 
-export type GetMenusResponses = {
+export type GetMenuResponses = {
     /**
      * OK
      */
-    200: ResultIPageMenu;
+    200: ResultMenu;
 };
 
-export type GetMenusResponse = GetMenusResponses[keyof GetMenusResponses];
+export type GetMenuResponse = GetMenuResponses[keyof GetMenuResponses];
 
 export type ClientOptions = {
     baseURL: 'http://localhost:8080' | (string & {});

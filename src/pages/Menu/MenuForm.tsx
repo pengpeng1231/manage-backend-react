@@ -1,120 +1,100 @@
-import type { ProFormColumnsType } from "@ant-design/pro-components";
+import { createMenu, editMenu, getMenu, getMenus, Menu } from "@/client";
 import {
-  BetaSchemaForm,
   ProForm,
-  ProFormSelect,
+  ProFormDigit,
+  ProFormInstance,
+  ProFormSegmented,
   ProFormText,
+  ProFormTreeSelect,
 } from "@ant-design/pro-components";
-
-const valueEnum = {
-  all: { text: "全部", status: "Default" },
-  open: {
-    text: "未解决",
-    status: "Error",
-  },
-  closed: {
-    text: "已解决",
-    status: "Success",
-    disabled: true,
-  },
-  processing: {
-    text: "解决中",
-    status: "Processing",
-  },
-};
-
-type DataItem = {
-  name: string;
-  state: string;
-};
-
-const columns: ProFormColumnsType<DataItem>[] = [
-  {
-    title: "标题",
-    dataIndex: "title",
-    formItemProps: {
-      rules: [
-        {
-          required: true,
-          message: "此项为必填项",
-        },
-      ],
-    },
-    width: "m",
-  },
-  {
-    title: "状态",
-    dataIndex: "state",
-    valueType: "select",
-    valueEnum,
-    width: "m",
-  },
-];
+import { message } from "antd";
+import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 
 const MenuForm = () => {
+  const formRef = useRef<ProFormInstance<Menu>>(null);
+  const { id } = useParams();
+
+  const onFinish = async (values: Menu) => {
+    try {
+      let res;
+
+      if (values.id) {
+        res = await editMenu({ body: values });
+      } else {
+        res = await createMenu({ body: values });
+        formRef.current?.setFieldsValue({ id: res.data?.data });
+      }
+
+      if (res.data?.success) {
+        message.success(res.data.message);
+      } else {
+        message.error(res.data?.message);
+      }
+    } catch (error) {
+      message.error("提交失败");
+    }
+  };
+
+  useEffect(() => {
+    if (formRef.current && id) {
+      getMenu({
+        path: {
+          id: Number(id),
+        },
+      }).then((res) => {
+        if (res.data?.success) {
+          formRef.current?.setFieldsValue(res.data?.data || {});
+        }
+      });
+    }
+  }, [formRef, id]);
+
   return (
-    <ProForm>
-      <h1>ProForm </h1>
-      <ProFormText name="username" />
-      <ProFormSelect
-        name="select-multiple"
-        label="多选"
-        valueEnum={{
-          red: "Red",
-          green: "Green",
-          blue: "Blue",
+    <ProForm
+      formRef={formRef}
+      initialValues={{ status: 1, sortNum: 0 }}
+      onFinish={onFinish}
+    >
+      <ProFormText name="id" label="ID" hidden />
+      <ProFormText name="name" label="名称" required />
+      <ProFormTreeSelect
+        label="父级菜单"
+        name="parentId"
+        placeholder="父级菜单"
+        allowClear
+        secondary
+        request={async () => {
+          const res = await getMenus({
+            body: {},
+          });
+          return res.data?.data?.records || [];
         }}
         fieldProps={{
-          mode: "multiple",
+          filterTreeNode: true,
+          showSearch: true,
+          popupMatchSelectWidth: false,
+          labelInValue: false,
+          autoClearSearchValue: true,
+          treeNodeFilterProp: "title",
+          fieldNames: {
+            label: "name",
+            value: "id",
+          },
         }}
-        placeholder="Please select favorite colors"
-        rules={[
-          {
-            required: true,
-            message: "Please select your favorite colors!",
-            type: "array",
-          },
-        ]}
       />
-      <h1>表单1 </h1>
-      <BetaSchemaForm<DataItem> layoutType="Embed" columns={columns} />
-      <h1>表单2</h1>
-      <BetaSchemaForm<DataItem>
-        layoutType="Embed"
-        columns={[
-          {
-            title: "创建时间",
-            key: "showTime",
-            dataIndex: "createName",
-            valueType: "date",
-          },
-          {
-            title: "分组",
-            valueType: "group",
-            columns: [
-              {
-                title: "状态",
-                dataIndex: "groupState",
-                valueType: "select",
-                width: "xs",
-                valueEnum,
-              },
-              {
-                title: "标题",
-                width: "md",
-                dataIndex: "groupTitle",
-                formItemProps: {
-                  rules: [
-                    {
-                      required: true,
-                      message: "此项为必填项",
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-        ]}
+      <ProFormText name="path" label="路径" required />
+      <ProFormText name="icon" label="图标" />
+      <ProFormDigit label="排序" name="sortNum" min={0} max={99999} />
+      <ProFormSegmented
+        name="status"
+        label="状态"
+        valueEnum={() => {
+          return new Map([
+            [1, "开启"],
+            [0, "禁用"],
+          ]);
+        }}
       />
     </ProForm>
   );
