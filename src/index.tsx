@@ -5,6 +5,7 @@ import reportWebVitals from "./reportWebVitals";
 import { client } from "./client/client.gen";
 import "@ant-design/v5-patch-for-react-19";
 import "./index.css";
+import "./assets/css/antd.css";
 
 client.setConfig({
   withCredentials: true,

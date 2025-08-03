@@ -60,8 +60,8 @@ export type MenuQuery = {
 export type IPageMenu = {
     size?: number;
     current?: number;
-    total?: number;
     records?: Array<Menu>;
+    total?: number;
     /**
      * @deprecated
      */
@@ -73,6 +73,14 @@ export type ResultIPageMenu = {
     message?: string;
     data?: IPageMenu;
     success?: boolean;
+};
+
+export type Department = {
+    id?: number;
+    createTime?: number;
+    updateTime?: number;
+    name?: string;
+    parentId?: number;
 };
 
 export type ResultUserVo = {
@@ -87,12 +95,28 @@ export type UserVo = {
     username?: string;
     email?: string;
     phone?: string;
+    department?: Department;
 };
 
 export type ResultMenu = {
     code?: number;
     message?: string;
     data?: Menu;
+    success?: boolean;
+};
+
+export type MenuVo = {
+    id?: number;
+    name?: string;
+    path?: string;
+    icon?: string;
+    parentId?: number;
+};
+
+export type ResultListMenuVo = {
+    code?: number;
+    message?: string;
+    data?: Array<MenuVo>;
     success?: boolean;
 };
 
@@ -244,22 +268,6 @@ export type LoginOrRegisterResponses = {
 
 export type LoginOrRegisterResponse = LoginOrRegisterResponses[keyof LoginOrRegisterResponses];
 
-export type CheckAuthData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/api/checkAuth';
-};
-
-export type CheckAuthResponses = {
-    /**
-     * OK
-     */
-    200: ResultUserVo;
-};
-
-export type CheckAuthResponse = CheckAuthResponses[keyof CheckAuthResponses];
-
 export type DeleteUserData = {
     body?: never;
     path: {
@@ -313,6 +321,38 @@ export type GetMenuResponses = {
 };
 
 export type GetMenuResponse = GetMenuResponses[keyof GetMenuResponses];
+
+export type GetUserMenuListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/getUserMenuList';
+};
+
+export type GetUserMenuListResponses = {
+    /**
+     * OK
+     */
+    200: ResultListMenuVo;
+};
+
+export type GetUserMenuListResponse = GetUserMenuListResponses[keyof GetUserMenuListResponses];
+
+export type CheckAuthData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/checkAuth';
+};
+
+export type CheckAuthResponses = {
+    /**
+     * OK
+     */
+    200: ResultUserVo;
+};
+
+export type CheckAuthResponse = CheckAuthResponses[keyof CheckAuthResponses];
 
 export type ClientOptions = {
     baseURL: 'http://localhost:8080' | (string & {});

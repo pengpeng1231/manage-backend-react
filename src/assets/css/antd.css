@@ -1,0 +1,12 @@
+
+.base-layout .ant-breadcrumb {
+  padding-top: 6px !important;
+}
+
+.base-layout_tabs .ant-tabs-nav {
+  margin-bottom: 0 !important;
+}
+
+.base-layout_tabs .ant-tabs-nav-wrap {
+  padding: 8px 20px 0 !important;
+}

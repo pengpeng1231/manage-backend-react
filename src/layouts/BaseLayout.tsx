@@ -2,34 +2,50 @@ import {
   PageContainer,
   ProLayout,
   DefaultFooter,
+  MenuDataItem,
 } from "@ant-design/pro-components";
 import { GithubOutlined } from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { checkAuth } from "@/client";
-import { message } from "antd";
-import { useLocation } from "react-router-dom";
+import { checkAuth, getUserMenuList } from "@/client";
+import { message, Tabs } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BaseLayout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const authCheck = async () => {
-      try {
-        const res = await checkAuth();
-        if (res.data?.success) {
-          setIsAuthenticated(true);
-        } else {
-          message.error(res.data?.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
+  const requestMenu = useCallback(async () => {
+    if (!isAuthenticated) {
+      return new Promise<MenuDataItem[]>(() => {});
+    }
 
+    const res = await getUserMenuList();
+    return res.data?.data as MenuDataItem[];
+  }, [isAuthenticated]);
+
+  const authCheck = async () => {
+    try {
+      const res = await checkAuth();
+
+      if (res.data?.success) {
+        setIsAuthenticated(true);
+      } else {
+        message.error(res.data?.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const navigateTo = (item: MenuDataItem) => {
+    navigate(item.path!);
+  };
+
+  useEffect(() => {
     authCheck();
   }, []);
 
@@ -43,9 +59,9 @@ const BaseLayout = () => {
 
   return (
     <ProLayout
+      className="base-layout"
       layout="mix"
-      headerTitleRender={() => "React Test"}
-      headerContentRender={() => <div>Header Content</div>}
+      location={location}
       footerRender={() => (
         <DefaultFooter
           copyright="@2019 蚂蚁金服体验技术部出品"
@@ -71,35 +87,44 @@ const BaseLayout = () => {
           ]}
         />
       )}
-      pageTitleRender={() => "React Test"}
+      pageTitleRender={(item) => item.title as string}
+      menuItemRender={(item: MenuDataItem, dom) => (
+        <span onClick={() => navigateTo(item)}>{dom}</span>
+      )}
       menu={{
-        request: async () => {
-          return [
-            {
-              path: "/dashboard",
-              name: "Dashboard",
-              icon: <icons.GithubOutlined />,
-            },
-            {
-              path: "/user",
-              name: "User Management",
-              icon: <icons.GithubOutlined />,
-              children: [
-                {
-                  path: "/user/list",
-                  name: "User List",
-                },
-                {
-                  path: "/user/create",
-                  name: "Create User",
-                },
-              ],
-            },
-          ];
-        },
+        request: requestMenu,
       }}
+      defaultCollapsed={true}
     >
-      <PageContainer>
+      <Tabs
+        className="base-layout_tabs"
+        items={[
+          { label: "Tab 1", key: "1" },
+          { label: "Tab 2", key: "2" },
+        ]}
+        type="editable-card"
+        hideAdd
+      />
+      <PageContainer
+        header={{
+          breadcrumb: {
+            items: [
+              {
+                path: "",
+                title: "一级页面",
+              },
+              {
+                path: "",
+                title: "二级页面",
+              },
+              {
+                path: "",
+                title: "当前页面",
+              },
+            ],
+          },
+        }}
+      >
         <Outlet></Outlet>
       </PageContainer>
     </ProLayout>
