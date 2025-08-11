@@ -12,11 +12,20 @@ import { checkAuth, getUserMenuList } from "@/client";
 import { message, Tabs } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
+export interface PageConfig {
+  hideBreadcrumb?: boolean;
+  hideTitle?: boolean;
+}
+
 const BaseLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [pageConfig, setPageConfig] = useState<PageConfig>({
+    hideBreadcrumb: false,
+    hideTitle: false,
+  });
 
   const requestMenu = useCallback(async () => {
     if (!isAuthenticated) {
@@ -48,6 +57,13 @@ const BaseLayout = () => {
   useEffect(() => {
     authCheck();
   }, []);
+
+  useEffect(() => {
+    setPageConfig({
+      hideBreadcrumb: false,
+      hideTitle: false,
+    });
+  }, [location]);
 
   if (loading) {
     return null;
@@ -87,7 +103,9 @@ const BaseLayout = () => {
           ]}
         />
       )}
-      pageTitleRender={(item) => item.title as string}
+      pageTitleRender={(item) =>
+        pageConfig.hideTitle ? "" : (item.title as string)
+      }
       menuItemRender={(item: MenuDataItem, dom) => (
         <span onClick={() => navigateTo(item)}>{dom}</span>
       )}
@@ -107,25 +125,27 @@ const BaseLayout = () => {
       />
       <PageContainer
         header={{
-          breadcrumb: {
-            items: [
-              {
-                path: "",
-                title: "一级页面",
+          breadcrumb: pageConfig.hideBreadcrumb
+            ? undefined
+            : {
+                items: [
+                  {
+                    path: "",
+                    title: "一级页面",
+                  },
+                  {
+                    path: "",
+                    title: "二级页面",
+                  },
+                  {
+                    path: "",
+                    title: "当前页面",
+                  },
+                ],
               },
-              {
-                path: "",
-                title: "二级页面",
-              },
-              {
-                path: "",
-                title: "当前页面",
-              },
-            ],
-          },
         }}
       >
-        <Outlet></Outlet>
+        <Outlet context={{ setPageConfig }}></Outlet>
       </PageContainer>
     </ProLayout>
   );

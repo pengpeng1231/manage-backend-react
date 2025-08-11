@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { RouteObject } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import BaseLayout from "../layouts/BaseLayout";
 import BasePage from "../layouts/BasePage";
 import Login from "../pages/Login/Login";
@@ -11,7 +11,7 @@ const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 const MenuList = lazy(() => import("../pages/Menu/MenuList"));
 const MenuForm = lazy(() => import("../pages/Menu/MenuForm"));
 
-const routes: RouteObject[] = [
+const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
@@ -52,6 +52,6 @@ const routes: RouteObject[] = [
     path: "*",
     element: <NotFound />,
   },
-];
+]);
 
-export default routes;
+export default router;
