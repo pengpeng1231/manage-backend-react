@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import BaseLayout from "../layouts/BaseLayout";
 import BasePage from "../layouts/BasePage";
 import Login from "../pages/Login/Login";
@@ -11,7 +11,7 @@ const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
 const MenuList = lazy(() => import("../pages/Menu/MenuList"));
 const MenuForm = lazy(() => import("../pages/Menu/MenuForm"));
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: "/login",
     element: <Login />,
@@ -34,6 +34,10 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
+            element: <Navigate to="list" replace />,
+          },
+          {
+            path: "list",
             element: <MenuList />,
           },
           {
@@ -52,6 +56,6 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFound />,
   },
-]);
+];
 
-export default router;
+export default routes;

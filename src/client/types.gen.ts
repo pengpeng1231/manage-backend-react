@@ -19,6 +19,7 @@ export type Menu = {
     status?: number;
     parentId?: number;
     sortNum?: number;
+    hideInMenu?: boolean;
     children?: Array<Menu>;
 };
 
@@ -111,6 +112,7 @@ export type MenuVo = {
     path?: string;
     icon?: string;
     parentId?: number;
+    hideInMenu?: boolean;
 };
 
 export type ResultListMenuVo = {

@@ -2,14 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { client } from "./client/client.gen";
 import "@ant-design/v5-patch-for-react-19";
 import "./index.css";
 import "./assets/css/antd.css";
-
-client.setConfig({
-  withCredentials: true,
-});
+import "./axios.config";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

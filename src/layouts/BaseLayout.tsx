@@ -6,10 +6,10 @@ import {
 } from "@ant-design/pro-components";
 import { GithubOutlined } from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
-import { useCallback, useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { checkAuth, getUserMenuList } from "@/client";
-import { message, Tabs } from "antd";
+import { useEffect, useState } from "react";
+import { Outlet } from "react-router-dom";
+import { getUserMenuList } from "@/client";
+import { Tabs } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export interface PageConfig {
@@ -20,34 +20,15 @@ export interface PageConfig {
 const BaseLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [pageConfig, setPageConfig] = useState<PageConfig>({
     hideBreadcrumb: false,
     hideTitle: false,
   });
 
-  const requestMenu = useCallback(async () => {
-    if (!isAuthenticated) {
-      return new Promise<MenuDataItem[]>(() => {});
-    }
-
+  const requestMenu = async () => {
     const res = await getUserMenuList();
-    return res.data?.data as MenuDataItem[];
-  }, [isAuthenticated]);
-
-  const authCheck = async () => {
-    try {
-      const res = await checkAuth();
-
-      if (res.data?.success) {
-        setIsAuthenticated(true);
-      } else {
-        message.error(res.data?.message);
-      }
-    } finally {
-      setLoading(false);
-    }
+    const list = res.data?.data as MenuDataItem[];
+    return list;
   };
 
   const navigateTo = (item: MenuDataItem) => {
@@ -55,23 +36,12 @@ const BaseLayout = () => {
   };
 
   useEffect(() => {
-    authCheck();
-  }, []);
-
-  useEffect(() => {
+    console.log(location);
     setPageConfig({
       hideBreadcrumb: false,
       hideTitle: false,
     });
   }, [location]);
-
-  if (loading) {
-    return null;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
-  }
 
   return (
     <ProLayout
@@ -123,28 +93,7 @@ const BaseLayout = () => {
         type="editable-card"
         hideAdd
       />
-      <PageContainer
-        header={{
-          breadcrumb: pageConfig.hideBreadcrumb
-            ? undefined
-            : {
-                items: [
-                  {
-                    path: "",
-                    title: "一级页面",
-                  },
-                  {
-                    path: "",
-                    title: "二级页面",
-                  },
-                  {
-                    path: "",
-                    title: "当前页面",
-                  },
-                ],
-              },
-        }}
-      >
+      <PageContainer>
         <Outlet context={{ setPageConfig }}></Outlet>
       </PageContainer>
     </ProLayout>

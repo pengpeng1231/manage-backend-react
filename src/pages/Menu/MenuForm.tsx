@@ -4,6 +4,7 @@ import {
   ProFormDigit,
   ProFormInstance,
   ProFormSegmented,
+  ProFormSwitch,
   ProFormText,
   ProFormTreeSelect,
 } from "@ant-design/pro-components";
@@ -20,16 +21,20 @@ const MenuForm = () => {
       let res;
 
       if (values.id) {
-        res = await editMenu({ body: values });
+        res = await editMenu({
+          body: values,
+          meta: {
+            showMessage: true,
+          },
+        });
       } else {
-        res = await createMenu({ body: values });
+        res = await createMenu({
+          body: values,
+          meta: {
+            showMessage: true,
+          },
+        });
         formRef.current?.setFieldsValue({ id: res.data?.data });
-      }
-
-      if (res.data?.success) {
-        message.success(res.data.message);
-      } else {
-        message.error(res.data?.message);
       }
     } catch (error) {
       message.error("提交失败");
@@ -57,7 +62,7 @@ const MenuForm = () => {
       onFinish={onFinish}
     >
       <ProFormText name="id" label="ID" hidden />
-      <ProFormText name="name" label="名称" required />
+      <ProFormText name="name" label="名称" rules={[{ required: true }]} />
       <ProFormTreeSelect
         label="父级菜单"
         name="parentId"
@@ -83,7 +88,7 @@ const MenuForm = () => {
           },
         }}
       />
-      <ProFormText name="path" label="路径" required />
+      <ProFormText name="path" label="路径" rules={[{ required: true }]} />
       <ProFormText name="icon" label="图标" />
       <ProFormDigit label="排序" name="sortNum" min={0} max={99999} />
       <ProFormSegmented
@@ -91,11 +96,12 @@ const MenuForm = () => {
         label="状态"
         valueEnum={() => {
           return new Map([
-            [1, "开启"],
-            [0, "禁用"],
+            [0, "开启"],
+            [1, "禁用"],
           ]);
         }}
       />
+      <ProFormSwitch name="hideInMenu" label="隐藏菜单" />
     </ProForm>
   );
 };

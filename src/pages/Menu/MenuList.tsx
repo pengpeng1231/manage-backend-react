@@ -1,9 +1,9 @@
-import { delMenu, getMenus, Menu } from "@/client";
+import { delMenu, editMenu, getMenus, Menu } from "@/client";
 import { ProColumns } from "@ant-design/pro-components";
 import BaseProTable, {
   type BaseProTableProps,
 } from "@components/BaseProTable/BaseProTable";
-import { message, Select, TreeSelect } from "antd";
+import { message, Select, Switch, TreeSelect } from "antd";
 import { Key, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,10 +62,33 @@ const MenuPage = () => {
             placeholder="状态"
             options={[
               { label: "全部", value: null },
-              { label: "开启", value: 1 },
-              { label: "禁用", value: 0 },
+              { label: "开启", value: 0 },
+              { label: "禁用", value: 1 },
             ]}
           ></Select>
+        );
+      },
+    },
+    {
+      title: "隐藏菜单",
+      dataIndex: "hideInMenu",
+      hideInSearch: true,
+      render(_, record) {
+        return (
+          <Switch
+            defaultChecked={record.hideInMenu}
+            onChange={(hideInMenu) => {
+              editMenu({
+                body: {
+                  ...record,
+                  hideInMenu,
+                },
+                meta: {
+                  showMessage: true,
+                },
+              });
+            }}
+          ></Switch>
         );
       },
     },
@@ -99,13 +122,12 @@ const MenuPage = () => {
 
   const onDelete = async (keys: Key[]) => {
     try {
-      const res = await delMenu({ body: { ids: keys as number[] } });
-
-      if (res.data?.success) {
-        message.success(res.data.message);
-      } else {
-        message.error(res.data?.message);
-      }
+      await delMenu({
+        body: { ids: keys as number[] },
+        meta: {
+          showMessage: true,
+        },
+      });
     } catch (error) {
       message.error("删除失败");
     }
@@ -115,9 +137,7 @@ const MenuPage = () => {
     getMenus({
       body: {},
     }).then((res) => {
-      if (res.data?.success) {
-        setDataSource(res.data?.data?.records || []);
-      }
+      setDataSource(res.data?.data?.records || []);
     });
   }, []);
 
