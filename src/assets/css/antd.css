@@ -10,3 +10,11 @@
 .base-layout_tabs .ant-tabs-nav-wrap {
   padding: 8px 20px 0 !important;
 }
+
+.ant-pro-page-container {
+  background-color: #fff;
+}
+
+.ant-pro-layout .ant-layout-sider.ant-pro-sider {
+  background-color: #fff;
+}

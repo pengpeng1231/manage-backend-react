@@ -16,8 +16,11 @@ export type Menu = {
     name?: string;
     path?: string;
     icon?: string;
+    component?: string;
+    params?: string;
+    redirect?: string;
     status?: number;
-    parentId?: number;
+    parentId?: number | null;
     sortNum?: number;
     hideInMenu?: boolean;
     children?: Array<Menu>;
@@ -60,9 +63,9 @@ export type MenuQuery = {
 
 export type IPageMenu = {
     size?: number;
-    current?: number;
     records?: Array<Menu>;
     total?: number;
+    current?: number;
     /**
      * @deprecated
      */
@@ -106,19 +109,28 @@ export type ResultMenu = {
     success?: boolean;
 };
 
+export type AuthVo = {
+    user?: UserVo;
+    menus?: Array<MenuVo>;
+};
+
 export type MenuVo = {
     id?: number;
     name?: string;
     path?: string;
     icon?: string;
+    params?: string;
+    component?: string;
+    redirect?: string;
     parentId?: number;
     hideInMenu?: boolean;
+    children?: Array<MenuVo>;
 };
 
-export type ResultListMenuVo = {
+export type ResultAuthVo = {
     code?: number;
     message?: string;
-    data?: Array<MenuVo>;
+    data?: AuthVo;
     success?: boolean;
 };
 
@@ -324,22 +336,6 @@ export type GetMenuResponses = {
 
 export type GetMenuResponse = GetMenuResponses[keyof GetMenuResponses];
 
-export type GetUserMenuListData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/api/getUserMenuList';
-};
-
-export type GetUserMenuListResponses = {
-    /**
-     * OK
-     */
-    200: ResultListMenuVo;
-};
-
-export type GetUserMenuListResponse = GetUserMenuListResponses[keyof GetUserMenuListResponses];
-
 export type CheckAuthData = {
     body?: never;
     path?: never;
@@ -351,7 +347,7 @@ export type CheckAuthResponses = {
     /**
      * OK
      */
-    200: ResultUserVo;
+    200: ResultAuthVo;
 };
 
 export type CheckAuthResponse = CheckAuthResponses[keyof CheckAuthResponses];

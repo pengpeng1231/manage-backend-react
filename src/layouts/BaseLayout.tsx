@@ -8,9 +8,9 @@ import { GithubOutlined } from "@ant-design/icons";
 import * as icons from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { getUserMenuList } from "@/client";
 import { Tabs } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
+import userStore from "@/store/user";
 
 export interface PageConfig {
   hideBreadcrumb?: boolean;
@@ -24,10 +24,10 @@ const BaseLayout = () => {
     hideBreadcrumb: false,
     hideTitle: false,
   });
+  const { menus } = userStore();
 
   const requestMenu = async () => {
-    const res = await getUserMenuList();
-    const list = res.data?.data as MenuDataItem[];
+    const list = menus;
     return list;
   };
 
@@ -36,7 +36,6 @@ const BaseLayout = () => {
   };
 
   useEffect(() => {
-    console.log(location);
     setPageConfig({
       hideBreadcrumb: false,
       hideTitle: false,

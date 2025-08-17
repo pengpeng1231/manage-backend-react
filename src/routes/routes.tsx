@@ -1,21 +1,15 @@
 import { lazy } from "react";
-import { Navigate } from "react-router-dom";
-import BaseLayout from "../layouts/BaseLayout";
-import BasePage from "../layouts/BasePage";
-import Login from "../pages/Login/Login";
+import { Navigate, RouteObject } from "react-router-dom";
+import BaseLayout from "@/layouts/BaseLayout";
+import Login from "@/pages/Login/Login";
+import Home from "@/pages/Home/Home";
+import NotFound from "@/pages/NotFound/NotFound";
 
-const Home = lazy(() => import("../pages/Home/Home"));
-const About = lazy(() => import("../pages/About/About"));
-const UserProfile = lazy(() => import("../pages/UserProfile/UserProfile"));
-const NotFound = lazy(() => import("../pages/NotFound/NotFound"));
-const MenuList = lazy(() => import("../pages/Menu/MenuList"));
-const MenuForm = lazy(() => import("../pages/Menu/MenuForm"));
+const MenuList = lazy(() => import("@/pages/Menu/MenuList"));
+const MenuForm = lazy(() => import("@/pages/Menu/MenuForm"));
+const UserProfile = lazy(() => import("@/pages/UserProfile/UserProfile"));
 
-const routes = [
-  {
-    path: "/login",
-    element: <Login />,
-  },
+const routes: RouteObject[] = [
   {
     path: "/",
     element: <BaseLayout />,
@@ -25,15 +19,10 @@ const routes = [
         element: <Home />,
       },
       {
-        path: "about",
-        element: <About />,
-      },
-      {
         path: "menu",
-        element: <BasePage />,
         children: [
           {
-            path: "",
+            index: true,
             element: <Navigate to="list" replace />,
           },
           {
@@ -47,10 +36,14 @@ const routes = [
         ],
       },
       {
-        path: "users/:id",
+        path: "userProfile",
         element: <UserProfile />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "*",
